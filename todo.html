@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>To-Do list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+</head>
+
+<body>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3% 5% 2% 5%;
+      border-radius: 50px;
+      background-image: url(https://th.bing.com/th/id/R.406711997feba5932ec6804f868cc2e0?rik=Iq5KoG7d%2fiN2Jg&riu=http%3a%2f%2fwww.supercoloring.com%2fsites%2fdefault%2ffiles%2fstyles%2fcoloring_medium%2fpublic%2ffif%2f2017%2f09%2flegal-lined-paper-template-paper-craft.jpg&ehk=CRQNnoFuJadMQ%2bClva3wm6zqEm6fXyNvbMWfFZBKVzI%3d&risl=&pid=ImgRaw&r=0);
+      background-size: cover;
+    }
+
+    .form h1 {
+      text-align: center;
+      margin-bottom: 5%;
+      color: #fff;
+      font-size: 48px;
+    }
+
+    .input-type {
+      background-color: #fff;
+      padding: 2% 1% 2% 5%;
+      border-radius: 50px;
+      margin-bottom: 8%;
+    }
+
+    #notes {
+      background-color: #fff;
+      padding-right: 12%;
+      border: none;
+      outline: 0;
+      font-weight: 600;
+      font-size: medium;
+    }
+
+    #notes::placeholder {
+      font-weight: 600;
+      font-size: large;
+    }
+
+    #btn {
+      border: none;
+      border-radius: 50px;
+      height: 30px;
+      font-weight: 600;
+      width: 90px;
+      color: #fff;
+      box-shadow: 0px 0px 5px 0px yellow;
+    }
+
+    ul {
+      height: 300px;
+      overflow-y: scroll;
+      padding-right: 4%;
+      transition: 3s;
+      transition-delay: 3s;
+    }
+
+    .list {
+      /* background-color: #fff; */
+      margin-top: 5%;
+      padding: 2% 0% 2% 3%;
+      font-size: large;
+      font-weight: 600;
+      /* border-radius: 50px; */
+      border-bottom: 3px solid #fff;
+    }
+
+    .listsecond {
+      border-bottom: 3px solid yellow;
+    }
+
+    .remove {
+      cursor: pointer;
+      text-decoration: none;
+      float: right;
+    }
+  </style>
+
+  <div class="form">
+    <h1>Google Notes 💡</h1>
+    <div class="input-type">
+      <input type="text" id="notes" placeholder="Enter Your list" />
+      <input class="bg-warning" id="btn" type="submit" value="ADD" />
+    </div>
+    <ul id="box"></ul>
+    <div class="checkList d-flex justify-content-end">
+      <button id="check" class="rounded border-0 fs-6 fw-semibold p-2 bg-light text-warning">
+        Check List
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+
+  <!-- My Script for Todo List -->
+  <script>
+    function notesFunction() {
+
+      
+      
+      const note = document.getElementById("notes");
+      const ul = document.querySelector("ul");
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.textContent = "❌";
+      a.className = "remove";
+      li.classList.toggle("list");
+      li.textContent = note.value;
+      li.appendChild(a);
+      ul.appendChild(li);
+      document.getElementById("notes").value;
+
+      // removing data from table----------------
+      const button = document.querySelector("ul");
+      button.addEventListener("click", function (e) {
+        const box = document.getElementById("box");
+        const li = e.target.parentNode;
+        box.removeChild(li);
+      });
+
+        } 
+
+
+    function toggle() {
+      notesFunction();
+
+      // let emptyArr = []
+      // let formValue = emptyArr.pop()
+      // let formValue = (note = notes.value) ;
+      // formValue = JSON.stringify(formValue);
+      // window.localStorage.setItem("to-do", formValue);
+
+      let formValue = document.getElementById("notes").value;
+
+      if (localStorage.getItem("todo") == null) {
+        localStorage.setItem("todo", "[]");
+      }
+
+      var old_todo = JSON.parse(localStorage.getItem("todo"));
+      old_todo.push(formValue);
+
+      window.localStorage.setItem("todo", JSON.stringify(old_todo));
+    }
+
+      // bug is here---------------------------------------+++++
+
+      var btn = document.getElementById("btn");
+      btn.addEventListener("click", toggle)
+          // document.getElementById("btn").click();
+    // to show my list-----------------------------+++++++
+
+    function checkbtn() {
+      const local = localStorage.getItem("todo");
+      const ul = document.querySelector("ul");
+      ul.innerHTML = `
+            <div class="bg-light p-3 rounded-3">
+            <h4 class='text-warning'> Your List ↴ </h4>
+            <ol>
+           <li class="listsecond"> ${local} <li>
+            </ol>
+            </div>`;
+    }
+    function togglecheck() {
+      checkbtn();
+    }
+    const check = document.getElementById("check");
+    check.addEventListener("click", togglecheck);
+  </script>
+</body>
+
+</html>
